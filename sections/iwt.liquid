@@ -1,0 +1,74 @@
+{% comment %} Use BEM -> IWT -> IWT__some-class {% endcomment %}
+
+{{ 'component-iwt.css' | asset_url | stylesheet_tag }}
+
+{% if section.blocks.size > 0 %}
+<section class="iwt">
+    {% for block in section.blocks %}
+
+        {% case block.type %}
+            {% when 'text' %}
+                {% assign text = block.settings.text %}
+                {% if text != blank %}
+                    <div class="iwt__text">
+                    {{ text }}
+                    </div>    
+                {% endif %}
+            
+            {% when 'image' %}
+                {% assign image = block.settings.image %} 
+                {% if image != blank %}
+                    <div class="iwt__image-wrapper">
+                    {{ image | image_url: width: 500 | image_tag: class: "iwt__image" }}
+                    </div>
+                {% endif %}
+            
+        {% endcase %}
+    {% endfor %}
+</section>
+{% endif %}
+
+{% schema %}
+{
+"name": "IWT",
+"class": "section",
+"settings": [
+    {
+        "type": "header",
+        "content": "Section paddings"
+    }
+],
+"blocks": [
+    {
+    "type": "text",
+    "name": "text",
+    "limit": 1,
+    "settings": [
+        {
+            "type": "richtext",
+            "id": "text", 
+            "label": "Text"
+        }
+    ]          
+    },
+    {
+        "type": "image",
+        "name": "Image",
+        "limit": 1,
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            }
+        ]          
+    }
+],
+"presets": [
+    {
+        "name": "IWT"
+    }
+]
+}
+ {% endschema %}
+ 

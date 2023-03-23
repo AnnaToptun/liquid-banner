@@ -1,0 +1,207 @@
+{{'component-banner-with-image.css' | asset_url | stylesheet_tag}}
+
+{%- style -%}
+.section-{{ section.id }}-background {
+    background: {{ section.settings.banner_background | times: 0.75 | round: 0 }}px;
+}
+.section-{{ section.id }}-height {
+    height: {{ section.settings.banner_height | times: 0.75 | round: 0 }}px;
+}
+.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.banner_top | times: 0.75 | round: 0 }}px;
+    padding-right: {{ section.settings.banner_right | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.banner_bottom | times: 0.75 | round: 0 }}px;
+    padding-left: {{ section.settings.banner_left | times: 0.75 | round: 0 }}px;
+}
+
+@media screen and (min-width: 750px) {
+    .section-{{ section.id }}-background {
+        background: {{ section.settings.banner_background | times: 0.75 | round: 0 }}px;
+    }
+    .section-{{ section.id }}-height {
+        height: {{ section.settings.banner_height | times: 0.75 | round: 0 }}px;
+    }
+    .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.banner_top | times: 0.75 | round: 0 }}px;
+        padding-right: {{ section.settings.banner_right | times: 0.75 | round: 0 }}px;
+        padding-bottom: {{ section.settings.banner_bottom | times: 0.75 | round: 0 }}px;
+        padding-left: {{ section.settings.banner_left | times: 0.75 | round: 0 }}px;
+    }
+}
+{%- endstyle -%}
+
+{% if section.blocks.size > 0 %}
+<section class="banner section-{{ section.id }}-height ">
+    {% for block in section.blocks %}
+        {% case block.type %}
+            {% when 'text'  %}
+                {% assign text_on_image = block.settings.text %}
+                {% assign text_heading = block.settings.heading %}
+                {%- if text_on_image != blank -%}
+                <div class="banner__text-wrapper section-{{ section.id }}-background banner__content__position-{{ section.settings.banner__content__position }} section-{{ section.id }}-padding">
+                    <p class="banner__text-heading"> 
+                        {{ text_heading }}
+                    </p>
+                    <p class="banner__text-on-image">
+                        {{ text_on_image }}
+                    </p>
+                </div>
+                {%- endif -%}          
+            {% when 'image'  %}
+                {% assign background_image = block.settings.image %}
+                {%- if background_image != blank -%}
+                    {{ background_image | image_url: width: 500 | image_tag: class: "banner__image"}}
+                {%- endif -%}
+        {% endcase %}
+    {% endfor %}
+</section>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Banner with image",
+    "class": "section",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Section paddings"
+        },
+        {
+            "type": "range",
+            "id": "banner_height",
+            "min": 300,
+            "max": 600,
+            "step": 5,
+            "unit": "px",
+            "label": "Banner height",
+            "default": 360
+        },
+        {
+            "type": "color_background",
+            "id": "banner_background",
+            "label": "Background",
+            "default": "linear-gradient(#ffffff, #000000)"
+        },
+        {
+            "type": "range",
+            "id": "banner_top",
+            "min": 10,
+            "max": 200,
+            "step": 5,
+            "unit": "px",
+            "label": "Padding top",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "banner_right",
+            "min": 10,
+            "max": 200,
+            "step": 5,
+            "unit": "px",
+            "label": "Padding right",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "banner_bottom",
+            "min": 10,
+            "max": 200,
+            "step": 5,
+            "unit": "px",
+            "label": "Padding bottom",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "banner_left",
+            "min": 10,
+            "max": 200,
+            "step": 5,
+            "unit": "px",
+            "label": "Padding left",
+            "default": 20
+        },
+        {
+            "type": "select",
+            "id": "banner__content__position",
+            "options": [
+                {
+                    "value": "top-left",
+                    "label": "top-left"
+                },
+                {
+                    "value": "top-center",
+                    "label": "top-center"
+                },
+                {
+                    "value": "top-right",
+                    "label": "top-right"
+                },
+                {
+                    "value": "middle-left",
+                    "label": "middle-left"
+                },
+                {
+                    "value": "middle-center",
+                    "label": "middle-center"
+                },
+                {
+                    "value": "middle-right",
+                    "label": "middle-right"
+                },
+                {
+                    "value": "bottom-left",
+                    "label": "bottom-left"
+                },
+                {
+                    "value": "bottom-center",
+                    "label": "bottom-center"
+                },
+                {
+                    "value": "bottom-right",
+                    "label": "bottom-right"
+                }
+            ],
+            "default": "middle-center",
+            "label": "middle-center"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "text",
+            "name": "text",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "text", 
+                    "label": "Text"
+                },
+                {
+                    "type": "text",
+                    "id": "heading",
+                    "default": "Banner with image",
+                    "label": "Heading for banner with image"
+                }
+            ]          
+        },
+        {
+            "type": "image",
+            "name": "Image",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                }
+            ]          
+        }
+    ],
+    "presets": [
+        {
+            "name": "Banner with image"
+        }
+    ]
+}
+{% endschema %}
