@@ -43,8 +43,7 @@
 
 .banner__text-heading {
     font-weight: bold;
-    color: rgb(255, 255, 255);
-    text-shadow: 1px 1px 0 rgb(58, 56, 56);
+    
 }
 .banner__text__heading-smaller {
     font-size: 40px;
@@ -139,4 +138,54 @@
 .banner__text__position-bottom-right {
     align-items: flex-end;
     justify-content: flex-end;
+}
+
+.banner__text__color-black {
+    color: black;
+    text-shadow: 1px 1px 0 rgb(255, 255, 255);
+}
+
+.banner__text__color-white {
+    color: white;
+    text-shadow: 1px 1px 0 rgb(68, 65, 65);
+}
+
+.banner__text__color-red {
+    color: red;
+    text-shadow: 1px 1px 0 rgb(36, 35, 35);
+}
+
+.banner__text__color-yellow {
+    color: yellow;
+    text-shadow: 1px 1px 0 rgb(36, 35, 35);
+}
+
+.banner__text__color-green {
+    color: green;
+    text-shadow: 1px 1px 0 rgb(36, 35, 35);
+}
+
+.banner__text__color-blue {
+    color: blue;
+    text-shadow: 1px 1px 0 rgb(36, 35, 35);
+}
+
+.banner__text__color-purple {
+    color: purple;
+    text-shadow: 1px 1px 0 rgb(36, 35, 35);
+}
+
+.banner__text__background-white{
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.banner__text__background-black{
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.banner__text__background-blue{
+    background-color: rgb(0, 0, 255, 0.5);
+}
+
+.banner__text__background-transparent{
+    background-color: transparent;
 }
