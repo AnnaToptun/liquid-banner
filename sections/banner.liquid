@@ -25,18 +25,18 @@
 {%- endstyle -%}
 
 {% if section.blocks.size > 0 %}
-<section class="banner section-{{ section.id }}-height ">
+<section class="banner section-{{ section.id }}-height">
     {% for block in section.blocks %}
         {% case block.type %}
             {% when 'text'  %}
                 {% assign text_on_image = block.settings.text %}
                 {% assign text_heading = block.settings.heading %}
                 {%- if text_on_image != blank -%}
-                <div class="banner__text-wrapper banner__text__position-{{ section.settings.banner__text__position }} section-{{ section.id }}-padding">
-                    <h1 class="banner__text-heading banner__text__heading-{{ section.settings.heading__font__size }}"> 
+                <div class="banner__text-wrapper banner__text__position-{{ section.settings.banner__text__position }} section-{{ section.id }}-padding section-{{ section.id }}-opacity banner__text__background-{{section.settings.banner__text__background}}">
+                    <h1 class="banner__text-heading banner__text__heading-{{ section.settings.heading__font__size }} banner__text__color-{{ section.settings.banner__text__color }}"> 
                         {{ text_heading }}
                     </h1>
-                    <p class="banner__text__on__image banner__text-{{ section.settings.text__font__size }}"">
+                    <p class="banner__text__on__image banner__text-{{ section.settings.text__font__size }} banner__text__color-{{ section.settings.banner__text__color }}">
                         {{ text_on_image }}
                     </p>
                 </div>
@@ -45,7 +45,7 @@
                 {% assign background_image_1 = block.settings.image_1 %}
                 {% assign background_image_2 = block.settings.image_2 %}
                 {%- if background_image_1 != blank-%}
-                    {{ background_image_1 | image_url: width: 500 | image_tag: class: "banner__image"}}
+                    {{ background_image_1 | image_url: width: 500 | image_tag: class: "banner__image "}}
                     {% if background_image_2 != blank %}
                         {{ background_image_1 | image_url: width: 500 | image_tag: class: "banner__image__half"}}
                         {{ background_image_2 | image_url: width: 500 | image_tag: class: "banner__image__half"}}  
@@ -113,7 +113,7 @@
                 }
             ],
             "default": "middle-center",
-            "label": "middle-center"
+            "label": "Bannet text position"
         },
         {
             "type": "range",
@@ -124,7 +124,7 @@
             "unit": "px",
             "label": "Padding top",
             "default": 20
-        },
+        },        
         {
             "type": "range",
             "id": "banner_right",
@@ -144,7 +144,7 @@
             "unit": "px",
             "label": "Padding bottom",
             "default": 20
-        },
+        },   
         {
             "type": "range",
             "id": "banner_left",
@@ -154,7 +154,7 @@
             "unit": "px",
             "label": "Padding left",
             "default": 20
-        },      
+        },
         {
             "type": "select",
             "id": "heading__font__size",
@@ -173,7 +173,7 @@
                 }
             ],
             "default": "middle",
-            "label": "Heading middle"
+            "label": "Font size for heading"
         },      
         {
             "type": "select",
@@ -193,8 +193,68 @@
                 }
             ],
             "default": "middle",
-            "label": "Heading middle"
-        }         
+            "label": "Font size for text"
+        },      
+        {
+            "type": "select",
+            "id": "banner__text__color",
+            "options": [
+                {
+                    "value": "black",
+                    "label": "Black"
+                },
+                {
+                    "value": "white",
+                    "label": "White"
+                },
+                {
+                    "value": "red",
+                    "label": "Red"
+                },                
+                {
+                    "value": "yellow",
+                    "label": "Yellow"
+                },                
+                {
+                    "value": "green",
+                    "label": "Green"
+                },                
+                {
+                    "value": "blue",
+                    "label": "Blue"
+                },                
+                {
+                    "value": "purple",
+                    "label": "Purple"
+                }
+            ],
+            "default": "white",
+            "label": "Color heading and text on image"
+        },  
+        {
+            "type": "select",
+            "id": "banner__text__background",
+            "options": [
+                {
+                    "value": "white",
+                    "label": "White"
+                },
+                {
+                    "value": "black",
+                    "label": "Black"
+                },
+                {
+                    "value": "blue",
+                    "label": "Blue"
+                },
+                {
+                    "value": "transparent",
+                    "label": "Transparent"
+                }
+            ],
+            "default": "transparent",
+            "label": "Background text"
+        }        
     ],
     "blocks": [
         {
