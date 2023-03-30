@@ -1,56 +1,67 @@
-{{'component-banner-with-image.css' | asset_url | stylesheet_tag}}
+{{'section-banner-with-image.css' | asset_url | stylesheet_tag}}
 
 {%- style -%}
-.section-{{ section.id }}-height {
-    height: {{ section.settings.banner_height | times: 0.75 | round: 0 }}px;
-}
-.section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.banner_top | times: 0.75 | round: 0 }}px;
-    padding-right: {{ section.settings.banner_right | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.banner_bottom | times: 0.75 | round: 0 }}px;
-    padding-left: {{ section.settings.banner_left | times: 0.75 | round: 0 }}px;
-}
-
 @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-height {
-        height: {{ section.settings.banner_height | times: 0.75 | round: 0 }}px;
-    }
     .section-{{ section.id }}-padding {
         padding-top: {{ section.settings.banner_top | times: 0.75 | round: 0 }}px;
-        padding-right: {{ section.settings.banner_right | times: 0.75 | round: 0 }}px;
-        padding-bottom: {{ section.settings.banner_bottom | times: 0.75 | round: 0 }}px;
         padding-left: {{ section.settings.banner_left | times: 0.75 | round: 0 }}px;
     }
 }
 {%- endstyle -%}
 
 {% if section.blocks.size > 0 %}
-<section class="banner section-{{ section.id }}-height">
+<section class="banner"
+  style="
+    --min-height: {{ section.settings.banner_height }}px;
+    --padding-top-desk: {{ section.settings.banner_top }}px;
+    --padding-bottom-desk: {{ section.settings.banner_bottom}}px;
+    --background-color: {{section.settings.background_color}}{{section.settings.background_opacity}}"
+  >
     {% for block in section.blocks %}
         {% case block.type %}
             {% when 'text'  %}
                 {% assign text_on_image = block.settings.text %}
                 {% assign text_heading = block.settings.heading %}
-                {%- if text_on_image != blank -%}
-                <div class="banner__text-wrapper banner__text__position-{{ section.settings.banner__text__position }} section-{{ section.id }}-padding section-{{ section.id }}-opacity banner__text__background-{{section.settings.banner__text__background}}">
-                    <h1 class="banner__text-heading banner__text__heading-{{ section.settings.heading__font__size }} banner__text__color-{{ section.settings.banner__text__color }}"> 
-                        {{ text_heading }}
-                    </h1>
-                    <p class="banner__text__on__image banner__text-{{ section.settings.text__font__size }} banner__text__color-{{ section.settings.banner__text__color }}">
-                        {{ text_on_image }}
-                    </p>
-                </div>
-                {%- endif -%}          
+                {%- if text_heading != blank or text_on_image != blank  -%}
+                    <div class="banner__text-wrapper banner__text__position-{{ section.settings.banner_text_position }} banner__text__background-{{section.settings.banner__text__background}}">
+                        {%- if text_heading != blank -%}
+                            <h1 class="banner__text-heading"
+                            style="
+                            --text-color: {{ block.settings.text_color}};
+                            --header-font-size: {{ block.settings.header_font_size }}px;
+                            --text-shadow-color: {{block.settings.text_shadow_color}}"
+                            > 
+                                {{ text_heading }}
+                            </h1>
+                        {%- endif -%} 
+                        {%- if text_on_image != blank -%}
+                            <p class="banner__text "
+                            style="
+                            --text-color: {{ block.settings.text_color}};
+                            --text-font-size: {{ block.settings.text_font_size }}px;
+                            --text-shadow-color: {{block.settings.text_shadow_color}};"
+                            >
+                                {{ text_on_image }}
+                            </p> 
+                        {%- endif -%} 
+                    </div>
+                {%- endif -%} 
             {% when 'image'  %}
                 {% assign background_image_1 = block.settings.image_1 %}
                 {% assign background_image_2 = block.settings.image_2 %}
+                 {% assign image_classes = 'banner__image' %}
+          
+                {%- if background_image_1 != blank and background_image_2 != blank -%}
+                   {% assign image_classes = 'banner__image banner__image--half' %}
+                {% endif %}
+                  
                 {%- if background_image_1 != blank-%}
-                    {{ background_image_1 | image_url: width: 500 | image_tag: class: "banner__image "}}
-                    {% if background_image_2 != blank %}
-                        {{ background_image_1 | image_url: width: 500 | image_tag: class: "banner__image__half"}}
-                        {{ background_image_2 | image_url: width: 500 | image_tag: class: "banner__image__half"}}  
-                    {% endif %}
+                  {% render 'image', image: background_image_1, class_name: image_classes, alt: background_image_1.alt, small_size: false-%}
                 {%- endif -%}
+
+                {% if background_image_2 != blank %}
+                  {% render 'image', image: background_image_2, class_name: image_classes, alt: background_image_1.alt, small_size: false %} 
+                {% endif %}
         {% endcase %}
     {% endfor %}
 </section>
@@ -58,244 +69,173 @@
 
 {% schema %}
  {
-    "name": "Banner with image",
-    "class": "section",
-    "settings": [
-        {
-            "type": "range",
-            "id": "banner_height",
-            "min": 300,
-            "max": 800,
-            "step": 5,
-            "unit": "px",
-            "label": "Banner height",
-            "default": 360
-        },        
-        {
-            "type": "select",
-            "id": "banner__text__position",
-            "options": [
-                {
-                    "value": "top-left",
-                    "label": "top-left"
-                },
-                {
-                    "value": "top-center",
-                    "label": "top-center"
-                },
-                {
-                    "value": "top-right",
-                    "label": "top-right"
-                },
-                {
-                    "value": "middle-left",
-                    "label": "middle-left"
-                },
-                {
-                    "value": "middle-center",
-                    "label": "middle-center"
-                },
-                {
-                    "value": "middle-right",
-                    "label": "middle-right"
-                },
-                {
-                    "value": "bottom-left",
-                    "label": "bottom-left"
-                },
-                {
-                    "value": "bottom-center",
-                    "label": "bottom-center"
-                },
-                {
-                    "value": "bottom-right",
-                    "label": "bottom-right"
-                }
-            ],
-            "default": "middle-center",
-            "label": "Bannet text position"
-        },
-        {
-            "type": "range",
-            "id": "banner_top",
-            "min": 10,
-            "max": 200,
-            "step": 5,
-            "unit": "px",
-            "label": "Padding top",
-            "default": 20
-        },        
-        {
-            "type": "range",
-            "id": "banner_right",
-            "min": 10,
-            "max": 200,
-            "step": 5,
-            "unit": "px",
-            "label": "Padding right",
-            "default": 20
-        },
-        {
-            "type": "range",
-            "id": "banner_bottom",
-            "min": 10,
-            "max": 200,
-            "step": 5,
-            "unit": "px",
-            "label": "Padding bottom",
-            "default": 20
-        },   
-        {
-            "type": "range",
-            "id": "banner_left",
-            "min": 10,
-            "max": 200,
-            "step": 5,
-            "unit": "px",
-            "label": "Padding left",
-            "default": 20
-        },
-        {
-            "type": "select",
-            "id": "heading__font__size",
-            "options": [
-                {
-                    "value": "smaller",
-                    "label": "Heading smaller"
-                },
-                {
-                    "value": "middle",
-                    "label": "Heading middle"
-                },
-                {
-                    "value": "bigger",
-                    "label": "Heading bigger"
-                }
-            ],
-            "default": "middle",
-            "label": "Font size for heading"
-        },      
-        {
-            "type": "select",
-            "id": "text__font__size",
-            "options": [
-                {
-                    "value": "smaller",
-                    "label": "Text smaller"
-                },
-                {
-                    "value": "middle",
-                    "label": "Text middle"
-                },
-                {
-                    "value": "bigger",
-                    "label": "Text bigger"
-                }
-            ],
-            "default": "middle",
-            "label": "Font size for text"
-        },      
-        {
-            "type": "select",
-            "id": "banner__text__color",
-            "options": [
-                {
-                    "value": "black",
-                    "label": "Black"
-                },
-                {
-                    "value": "white",
-                    "label": "White"
-                },
-                {
-                    "value": "red",
-                    "label": "Red"
-                },                
-                {
-                    "value": "yellow",
-                    "label": "Yellow"
-                },                
-                {
-                    "value": "green",
-                    "label": "Green"
-                },                
-                {
-                    "value": "blue",
-                    "label": "Blue"
-                },                
-                {
-                    "value": "purple",
-                    "label": "Purple"
-                }
-            ],
-            "default": "white",
-            "label": "Color heading and text on image"
-        },  
-        {
-            "type": "select",
-            "id": "banner__text__background",
-            "options": [
-                {
-                    "value": "white",
-                    "label": "White"
-                },
-                {
-                    "value": "black",
-                    "label": "Black"
-                },
-                {
-                    "value": "blue",
-                    "label": "Blue"
-                },
-                {
-                    "value": "transparent",
-                    "label": "Transparent"
-                }
-            ],
-            "default": "transparent",
-            "label": "Background text"
-        }        
-    ],
-    "blocks": [
-        {
-            "type": "text",
-            "name": "text",
-            "settings": [
-                {
-                    "type": "textarea",
-                    "id": "text", 
-                    "label": "Text"
-                },
-                {
-                    "type": "text",
-                    "id": "heading",
-                    "default": "Banner with image",
-                    "label": "Heading for banner with image"
-                }
-            ]          
-        },
-        {
-            "type": "image",
-            "name": "Image",
-            "limit": 1,
-            "settings": [
-                {
-                    "type": "image_picker",
-                    "id": "image_1",
-                    "label": "Image"
-                },
-                {
-                    "type": "image_picker",
-                    "id": "image_2",
-                    "label": "Image"
-                }
-            ]          
-        }
-    ],
-    "presets": [
-        {
-            "name": "Banner with image"
-        }
-    ]
+"name": "Banner with image",
+"class": "section",
+"settings": [
+    {
+        "type": "range",
+        "id": "banner_height",
+        "min": 300,
+        "max": 800,
+        "step": 5,
+        "unit": "px",
+        "label": "Banner height",
+        "default": 360
+    },        
+    {
+        "type": "select",
+        "id": "banner_text_position",
+        "options": [
+            {
+                "value": "top-left",
+                "label": "top-left"
+            },
+            {
+                "value": "top-center",
+                "label": "top-center"
+            },
+            {
+                "value": "top-right",
+                "label": "top-right"
+            },
+            {
+                "value": "middle-left",
+                "label": "middle-left"
+            },
+            {
+                "value": "middle-center",
+                "label": "middle-center"
+            },
+            {
+                "value": "middle-right",
+                "label": "middle-right"
+            },
+            {
+                "value": "bottom-left",
+                "label": "bottom-left"
+            },
+            {
+                "value": "bottom-center",
+                "label": "bottom-center"
+            },
+            {
+                "value": "bottom-right",
+                "label": "bottom-right"
+            }
+        ],
+        "default": "middle-center",
+        "label": "Bannet text position"
+    },
+    {
+        "type": "range",
+        "id": "banner_top",
+        "min": 10,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding top",
+        "default": 20
+    },        
+    {
+        "type": "range",
+        "id": "banner_bottom",
+        "min": 10,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding bottom",
+        "default": 20
+    },      
+    {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color",
+        "default": "#ffffff"
+    },
+    {
+        "type": "range",
+        "id": "background_opacity",
+        "min": 0,
+        "max": 95,
+        "step": 5,
+        "unit": "%",
+        "label": "Background opacity",
+        "default": 50
+    }        
+],
+"blocks": [
+    {
+        "type": "text",
+        "name": "text",
+        "limit": 1,
+        "settings": [
+            {
+                "type": "text",
+                "id": "heading",
+                "default": "Banner with image",
+                "label": "Heading for banner with image"
+            },
+            {
+                "type": "range",
+                "id": "header_font_size",
+                "min": 10,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Header size",
+                "default": 30
+            }, 
+            {
+                "type": "textarea",
+                "id": "text", 
+                "label": "Text"
+            },    
+            {
+                "type": "range",
+                "id": "text_font_size",
+                "min": 10,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Text size",
+                "default": 16 
+            },
+            {
+                "type": "color",
+                "id": "text_color",
+                "label": "Text color",
+                "default": "#ffffff"
+            },            
+            {
+                "type": "color",
+                "id": "text_shadow_color",
+                "label": "Shadow color",
+                "default": "#ffffff"
+            }
+        ]          
+    },
+    {
+        "type": "image",
+        "name": "Image",
+        "limit": 1,
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "image_1",
+                "label": "Image 1"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_2",
+                "label": "Image 2"
+            }
+        ]          
+    }
+],
+"presets": [
+    {
+        "name": "Banner with image"
+    }
+]
 }
 {% endschema %}
