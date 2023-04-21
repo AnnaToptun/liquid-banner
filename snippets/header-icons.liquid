@@ -1,0 +1,48 @@
+{%- comment -%}
+    {% render 'header-icons', title_icon: 'profile', class_name: icon_classes -%}
+{%- endcomment -%}
+{% case title_icon %}
+    {% when 'hamburger' %}
+        <svg class="{{class_name}}"  xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="none" viewBox="0 0 18 16">
+            <path d="M1 .5a.5.5 0 100 1h15.71a.5.5 0 000-1H1zM.5 8a.5.5 0 01.5-.5h15.71a.5.5 0 010 1H1A.5.5 0 01.5 8zm0 7a.5.5 0 01.5-.5h15.71a.5.5 0 010 1H1a.5.5 0 01-.5-.5z" fill="currentColor">
+        </svg>
+
+    {% when 'basket' %}
+        <svg class="{{class_name}}" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24">
+            <path d="M19.17,18H8.06a1,1,0,0,1-1-.79L4.32,4H2V2H5.13a1,1,0,0,1,1,.8l.4,1.91H21a1,1,0,0,1,.76.35,1,1,0,0,1,.23.81L20.16,17.16A1,1,0,0,1,19.17,18ZM8.87,16h9.45l1.51-9.29H6.93Z"></path>
+            <circle cx="18.69" cy="20.5" r="1.5"></circle>
+            <circle cx="8.5" cy="20.5" r="1.5"></circle>
+        </svg>
+
+    {% when 'profile' %}
+        <svg class="{{class_name}}"xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g id="Layer_5" data-name="Layer 5"><path d="M16.37,11.89a5.89,5.89,0,1,0-8.74,0A12.08,12.08,0,0,0,3,21a1,1,0,0,0,1,1H20a1,1,0,0,0,1-1A12.08,12.08,0,0,0,16.37,11.89ZM12,4A3.93,3.93,0,1,1,8.11,7.93,3.92,3.92,0,0,1,12,4ZM5.06,20a10.74,10.74,0,0,1,4.18-6.84,5.79,5.79,0,0,0,5.52,0A10.74,10.74,0,0,1,18.94,20Z"></path></g>
+        </svg>
+    
+    {% when 'search' %}   
+        <svg class="{{class_name}}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g id="Layer_3" data-name="Layer 3"><path d="M22,20.57l-6.14-6.14a7.65,7.65,0,0,0,1.61-4.7,7.73,7.73,0,1,0-7.72,7.72,7.65,7.65,0,0,0,4.7-1.61L20.57,22ZM9.73,15.45a5.73,5.73,0,1,1,5.72-5.72A5.73,5.73,0,0,1,9.73,15.45Z"></path> </g>
+        </svg> 
+    {% when 'close' %}
+        <svg class="{{class_name}}" aria-hidden="true" focusable="false" width="25" height="25 viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.48627 9.32917L2.82849 3.67098" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2.88539 9.38504L8.42932 3.61524" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    {% when 'plus' %}
+        <svg class="{{class_name}}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"  width="25px"  height="25px"  fill-rule="evenodd">
+            <path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/>
+        </svg>
+    {% when 'arrow' %}
+        <svg
+            viewBox="0 0 14 10"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+            class="{{class_name}}"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1a.5.5 0 010-1h10.793L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor">
+        </svg>
+    {% else %}
+        This is not a icon
+{% endcase %}

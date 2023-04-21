@@ -1,66 +1,70 @@
 {{'section-banner-with-image.css' | asset_url | stylesheet_tag}}
 
-{%- style -%}
-@media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-        padding-top: {{ section.settings.banner_top | times: 0.75 | round: 0 }}px;
-        padding-left: {{ section.settings.banner_left | times: 0.75 | round: 0 }}px;
-    }
-}
-{%- endstyle -%}
 
 {% if section.blocks.size > 0 %}
 <section class="banner"
   style="
     --min-height: {{ section.settings.banner_height }}px;
+    --min-height-mobile: {{ section.settings.banner_height_mobile }}px;
     --padding-top-desk: {{ section.settings.banner_top }}px;
-    --padding-bottom-desk: {{ section.settings.banner_bottom}}px;
+    --padding-bottom-desk: {{ section.settings.banner_bottom }}px;
+    --padding-top-mobile: {{ section.settings.banner_top_mobile }}px;
+    --padding-bottom-mobile: {{ section.settings.banner_bottom_mobile }}px;
     --background-color: {{section.settings.background_color}}{{section.settings.background_opacity}}"
   >
     {% for block in section.blocks %}
         {% case block.type %}
             {% when 'text'  %}
-                {% assign text_on_image = block.settings.text %}
+                {% assign text = block.settings.text %}
                 {% assign text_heading = block.settings.heading %}
-                {%- if text_heading != blank or text_on_image != blank  -%}
-                    <div class="banner__text-wrapper banner__text__position-{{ section.settings.banner_text_position }} banner__text__background-{{section.settings.banner__text__background}}">
+                {%- if text_heading != blank or text != blank  -%}
+                    <div class="banner__text-wrapper banner__text__position-{{ section.settings.banner_text_position }} 
+                        banner__text__background-{{section.settings.banner__text__background}}"
+                        style="
+                        --text-color: {{ block.settings.text_color}};
+                        --text-shadow-color: {{block.settings.text_shadow_color}}"
+                        >
                         {%- if text_heading != blank -%}
                             <h1 class="banner__text-heading"
                             style="
-                            --text-color: {{ block.settings.text_color}};
                             --header-font-size: {{ block.settings.header_font_size }}px;
-                            --text-shadow-color: {{block.settings.text_shadow_color}}"
+                            --header-font-size-mobile: {{ block.settings.header_font_size_mobile }}px;"
                             > 
                                 {{ text_heading }}
                             </h1>
                         {%- endif -%} 
-                        {%- if text_on_image != blank -%}
-                            <p class="banner__text "
+                        {%- if text != blank -%}
+                            <p class="banner__text"
                             style="
-                            --text-color: {{ block.settings.text_color}};
                             --text-font-size: {{ block.settings.text_font_size }}px;
-                            --text-shadow-color: {{block.settings.text_shadow_color}};"
+                            --text-font-size-mobile: {{ block.settings.text_font_size_mobile }}px;"
                             >
-                                {{ text_on_image }}
+                                {{ text }}
                             </p> 
                         {%- endif -%} 
                     </div>
                 {%- endif -%} 
             {% when 'image'  %}
-                {% assign background_image_1 = block.settings.image_1 %}
-                {% assign background_image_2 = block.settings.image_2 %}
-                 {% assign image_classes = 'banner__image' %}
-          
-                {%- if background_image_1 != blank and background_image_2 != blank -%}
-                   {% assign image_classes = 'banner__image banner__image--half' %}
+                {% assign image_1 = block.settings.image_1 %}
+                {% assign image_2 = block.settings.image_2 %}
+                {% assign image_mobile = block.settings.image_mobile %}
+                {% assign image_classes = 'banner__image' %}
+                {% assign image_classes_mobile = 'banner__image-mobile' %}
+           
+                {%- if image_1 != blank and image_2 != blank -%}
+                    {% assign image_classes = 'banner__image banner__image--half' %}
                 {% endif %}
-                  
-                {%- if background_image_1 != blank-%}
-                  {% render 'image', image: background_image_1, class_name: image_classes, alt: background_image_1.alt, small_size: false-%}
+                
+                {%- if image_1 != blank-%}
+                    {% render 'image', image: image_1, class_name: image_classes, alt: background_image_1.alt, small_size: false-%}
                 {%- endif -%}
 
-                {% if background_image_2 != blank %}
-                  {% render 'image', image: background_image_2, class_name: image_classes, alt: background_image_1.alt, small_size: false %} 
+                {% if image_2 != blank %}
+                    {% render 'image', image: image_2, class_name: image_classes, alt: background_image_2.alt, small_size: false %} 
+                {% endif %} 
+
+                {% if image_mobile != blank %}
+                    {% render 'image', image: image_mobile, class_name: image_classes_mobile, alt: image_mobile.alt, small_size: false %} 
                 {% endif %}
         {% endcase %}
     {% endfor %}
@@ -69,7 +73,7 @@
 
 {% schema %}
  {
-"name": "Banner with image",
+"name": "Banner",
 "class": "section",
 "settings": [
     {
@@ -81,46 +85,56 @@
         "unit": "px",
         "label": "Banner height",
         "default": 360
-    },        
+    }, 
+    {
+        "type": "range",
+        "id": "banner_height_mobile",
+        "min": 100,
+        "max": 500,
+        "step": 5,
+        "unit": "px",
+        "label": "Banner height mobile", 
+        "default": 360
+    },       
     {
         "type": "select",
         "id": "banner_text_position",
-        "options": [
+        "options": [ 
             {
                 "value": "top-left",
-                "label": "top-left"
+                "label": "Top-left"
             },
             {
                 "value": "top-center",
-                "label": "top-center"
+                "label": "Top-center"
             },
             {
                 "value": "top-right",
-                "label": "top-right"
+                "label": "Top-right"
             },
             {
                 "value": "middle-left",
-                "label": "middle-left"
+                "label": "Middle-left"
             },
             {
                 "value": "middle-center",
-                "label": "middle-center"
+                "label": "Middle-center"
             },
             {
                 "value": "middle-right",
-                "label": "middle-right"
+                "label": "Middle-right"
             },
             {
                 "value": "bottom-left",
-                "label": "bottom-left"
+                "label": "Bottom-left"
             },
             {
                 "value": "bottom-center",
-                "label": "bottom-center"
+                "label": "Bottom-center"
             },
             {
                 "value": "bottom-right",
-                "label": "bottom-right"
+                "label": "Bottom-right"
             }
         ],
         "default": "middle-center",
@@ -145,6 +159,26 @@
         "unit": "px",
         "label": "Padding bottom",
         "default": 20
+    },
+    {
+        "type": "range",
+        "id": "banner_top_mobile",
+        "min": 10,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding top mobile",
+        "default": 20
+    },        
+    {
+        "type": "range",
+        "id": "banner_bottom_mobile",
+        "min": 10,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Padding bottom mobile",
+        "default": 20
     },      
     {
         "type": "color",
@@ -160,7 +194,7 @@
         "step": 5,
         "unit": "%",
         "label": "Background opacity",
-        "default": 50
+        "default": 0
     }        
 ],
 "blocks": [
@@ -173,7 +207,7 @@
                 "type": "text",
                 "id": "heading",
                 "default": "Banner with image",
-                "label": "Heading for banner with image"
+                "label": "Header banner"
             },
             {
                 "type": "range",
@@ -186,9 +220,19 @@
                 "default": 30
             }, 
             {
+                "type": "range",
+                "id": "header_font_size_mobile",
+                "min": 10,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Header size mobile",
+                "default": 30
+            }, 
+            {
                 "type": "textarea",
                 "id": "text", 
-                "label": "Text"
+                "label": "Banner text"
             },    
             {
                 "type": "range",
@@ -198,6 +242,16 @@
                 "step": 1,
                 "unit": "px",
                 "label": "Text size",
+                "default": 16 
+            },    
+            {
+                "type": "range",
+                "id": "text_font_size_mobile",
+                "min": 10,
+                "max": 100,
+                "step": 1,
+                "unit": "px",
+                "label": "Text size mobile",
                 "default": 16 
             },
             {
@@ -228,6 +282,11 @@
                 "type": "image_picker",
                 "id": "image_2",
                 "label": "Image 2"
+            },
+            {
+                "type": "image_picker",
+                "id": "image_mobile",
+                "label": "Image mobile"
             }
         ]          
     }

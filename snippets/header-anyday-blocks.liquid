@@ -1,0 +1,85 @@
+
+
+{% case type %}
+    {% when 'link-list' %}
+        {% for block in array_blocks  %}
+            {% assign name_main_menu_handle = block.settings.name_main_menu | handleize %}
+            {% if link_title == name_main_menu_handle %}        
+                {% for i in (1..4) %}
+                    {% assign link_list_index = "link_list_" | append: i %}
+                    {% assign special_link_index = "special_link_" | append: i %}
+                    {% assign special_link_url_index = "special_link_url_" | append: i %}
+                    {% assign button_link_index = "button_link_" | append: i %}
+                    {% assign button_link_url_index = "button_link_" | append: i %}
+                    {% assign link_list = block.settings[link_list_index] %}
+                    {% assign special_link = block.settings[special_link_index] %}
+                    {% assign special_link_url = block.settings[special_link_url_index] %}
+                    {% assign button_link = block.settings[button_link_index] %}
+                    {% assign button_link_url = block.settings[button_link_url_index] %}
+
+                    {% if link_list != blank and counter <= 4 %}
+                        {% assign counter = counter | plus: 1 %}
+                        <ul>
+                            <span>{{link_list.title}}</span>
+                            {% for item in link_list.links %}
+                                <li>
+                                    <a class="block__links-item" href="{{item.url}}">{{item.title | escape }}</a>
+                                </li>
+                            {% endfor %}                            
+                            {% if special_link != blank and special_link_url != blank%}
+                                <li><a class="block__links-special-item" href="{{special_link_url}}">{{special_link | escape}}</a></li>
+                            {% endif %}
+                            {% if button_link != blank and button_link_url != blank%}
+                                <li class="block__links-button">
+                                    <a class="block__links-button-item" href="{{button_link_url}}">{{button_link | escape}}</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                {% endfor %}
+                {% break %}
+            {% endif %}
+        {% endfor %}
+    
+    {% when 'images' %}    
+        {% for block in array_blocks  %} 
+        {% assign name_main_menu_handle = block.settings.name_main_menu | handleize %}
+            {% if link_title == name_main_menu_handle %}        
+                {% for i in (1..4) %}
+                    {% assign block_image_index = "block_image_" | append: i %}
+                    {% assign block_title_index = "block_title_" | append: i %}
+                    {% assign show_new_index = "show_new_" | append: i %}
+                    {% assign block_url_index = "block_url_" | append: i %}
+                    {% assign block_subscribe_index = "block_subscribe_" | append: i %}
+
+                    {% assign block_image = block.settings[block_image_index] %}
+                    {% assign block_title = block.settings[block_title_index] %}
+                    {% assign block_show_new = block.settings[show_new_index] %}
+                    {% assign block_url = block.settings[block_url_index] %}
+                    {% assign block_subscribe = block.settings[block_subscribe_index] %}
+
+                    {% if block_image != blank and counter <= 4 %}
+                        {% assign counter = counter | plus: 1 %}
+                        <div>
+                            <a class="header__menu-block-image" href="{{block_url}}">
+                                <div class="header__menu-block-new--{{block_show_new}}">
+                                    NEW
+                                </div>
+                                <div class="header__menu-block-image-wrapper">
+                                    {% render 'image', image: block_image, class_name: image_classes, alt: block_image.alt, small_size: false-%}
+                                </div>                                   
+                                <button>{{ block_title }}</button>
+                                <h6>{{ block_subscribe }}</h6>
+                            </a> 
+                        </div>
+                    {% assign block_title = block.settings[block_image_title] %}
+                    {% assign block_image = block.settings.block_image %}  
+
+                    {% endif %}
+                {% endfor %}
+                {% break %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        
+{% endcase %}

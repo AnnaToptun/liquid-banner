@@ -1,0 +1,452 @@
+{{ 'header-anyday.css' | asset_url | stylesheet_tag }}
+{{ 'header-anyday-mobile.css' | asset_url | stylesheet_tag }}
+
+{% assign all_blocks = section.blocks  %}
+{% assign all_menu_links = section.settings.menu.links  %}
+{% assign logo_svg = section.settings.logo_svg %}
+{% assign logo_img = section.settings.logo_image %}
+
+{% assign image_classes = "header__logo-img" %}
+{% assign icon_classes = 'header__icon' %}           
+{% assign image_classes = 'header__menu-block-image-img' %}
+
+<script>
+
+    const openBurger = () =>{
+        const menu_mobile = document.getElementById("menu-mobile");
+        menu_mobile.className = "menu__mobile-is-open";
+    }
+
+    const closeBurger = () =>{        
+        const menu_mobile = document.getElementById("menu-mobile");
+        menu_mobile.className = "menu__mobile-is-close";
+    }
+
+    const openMenu = (event) =>{
+        const menu_dropleft_li = this.event.currentTarget.parentElement
+        menu_dropleft_li.className = "header__menu-has-dropleft visible"
+    }
+
+    const closeMenu = () => {
+        const menu_dropleft_li = this.event.currentTarget.parentElement.parentElement.parentElement
+        menu_dropleft_li.className = "header__menu-has-dropleft"
+    }
+</script>
+
+{%- liquid
+    assign posts_displayed = section.settings.blog.articles_count
+    if section.settings.posts_displayed <= section.settings.blog.articles_count
+      assign posts_exceed_limit = true
+      assign posts_displayed = section.settings.post_limit
+    endif
+-%}
+
+<header class="header"> 
+    <nav class="header__nav">
+        
+        <div class="header_menu-icons-with-burger">
+            <button class="header__icon-button" onclick="openBurger(event)">
+                {% render 'header-icons', title_icon: 'hamburger', class_name: icon_classes -%}
+            </button>
+            
+            {% render 'header-icons', title_icon: 'search', class_name: icon_classes -%}
+        </div>
+        <div class="header__nav-menu">
+            <a href="/" class="header__logo"
+                style="
+                --width-logo: {{ section.settings.width_logo }}px;
+                --width-logo-mobile: {{ section.settings.width_logo_mobile }}px;"
+            >     
+                {% if logo_svg != blank %}
+                    {{logo_svg}}
+                {% else %}
+                    {% render 'image', image: logo_img, class_name: image_classes, alt: logo.alt, small_size: false-%}
+                {% endif %}
+            </a> 
+            <ul class="header__menu">
+                {% for link in all_menu_links %}
+                    {% assign link_title_handle = link.title | handleize %}
+                    {% assign link_list_blocks = all_blocks | where: "type", "text"  %}                    
+                    {% assign images_blocks = all_blocks | where: "type", "image"  %}
+                    {% assign counter = 0 %}
+                    <li class="header__menu-has-dropdown">
+                        <a class="header__menu-title" href="{{link.url}}">{{link.title | escape }}</a>
+                        
+                        <div class="header__menu-dropdown">
+                            <div class="header__menu-dropdown-wrapper">
+                                {% render 'header-anyday-blocks', type: 'link-list', array_blocks: link_list_blocks, link_title: link_title_handle, counter: counter%}
+                                {% render 'header-anyday-blocks', type: 'images', array_blocks: images_blocks, link_title: link_title_handle, counter: counter%}
+                            </div>
+                        </div>
+                    </li>  
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="header_menu-icons">
+            {% render 'header-icons', title_icon: 'search', class_name: icon_classes -%}
+            {% render 'header-icons', title_icon: 'profile', class_name: icon_classes -%}
+            {% render 'header-icons', title_icon: 'basket', class_name: icon_classes -%}
+        </div>
+    </nav>
+    <nav id="menu-mobile" class="menu__mobile-is-close">
+        <div class="header-mobile">            
+            <div class="header_menu-mobile-icons">
+                <button class="header__icon-button" onclick="closeBurger()">
+                    {% render 'header-icons', title_icon: 'close', class_name: icon_classes -%}
+                </button>
+            </div>
+            <a href="/" class="header__logo"
+                style="
+                --width-logo: {{ section.settings.width_logo }}px;
+                --width-logo-mobile: {{ section.settings.width_logo_mobile }}px;">     
+                {% if logo_svg != blank %}
+                    {{logo_svg}}
+                {% else %}
+                    {% render 'image', image: logo_img, class_name: image_classes, alt: logo.alt, small_size: false-%}
+                {% endif %}
+            </a> 
+            <div class="header_menu-mobile-icons">
+                {% render 'header-icons', title_icon: 'basket', class_name: icon_classes -%}
+            </div>
+        </div>
+
+        <ul class="header__menu-mobile">            
+            {% for link in all_menu_links %}
+                {% assign link_title_handle = link.title | handleize %}
+                {% assign link_list_blocks = all_blocks | where: "type", "text"  %}                    
+                {% assign images_blocks = all_blocks | where: "type", "image"  %}
+                {% assign counter = 0 %}
+                <li  id="header-menu-dropleft" class="header__menu-has-dropleft ">
+                    <button class="header__icon-button" onclick="openMenu(event)">
+                        <a class="header__menu-title" href="{{link.url}}">{{link.title | escape }}</a>
+                        {% render 'header-icons', title_icon: 'plus', class_name: icon_classes -%}
+                    </button>    
+                    <div class="header__menu-dropleft">
+                        <div class="header__mobile--block-menu">
+                            <a class="header__mobile--block-title" href="{{link.url}}">{{link.title | escape }}</a>
+                            <button class="header__icon-button" onclick="closeMenu(event)">
+                                {% render 'header-icons', title_icon: 'arrow', class_name: icon_classes -%}
+                            </button>
+                        </div>
+                        <div class="header__menu-dropleft-wrapper">
+                          
+                            {% render 'header-anyday-blocks', type: 'link-list', array_blocks: link_list_blocks, link_title: link_title_handle, counter: counter%}
+                            {% render 'header-anyday-blocks', type: 'images', array_blocks: images_blocks, link_title: link_title_handle, counter: counter%}
+                            
+                        </div>
+                    </div>
+                </li>  
+            {% endfor %}
+        </ul>
+    </nav> 
+</header>
+
+
+{% schema %} 
+{
+    "name": "Header_Anyday",
+    "class": "section-header",
+    "settings": [
+        {
+            "type": "html",
+            "id": "logo_svg",
+            "label": "Logo"
+        },
+        {
+            "type": "image_picker",
+            "id": "logo_image",
+            "label": "Add logo"
+        },
+        {
+            "type": "range",
+            "id": "width_logo",
+            "min": 100,
+            "max": 500,
+            "step": 10,
+            "unit": "px",
+            "label": "Width logo", 
+            "default": 100
+        }, 
+        {
+            "type": "range",
+            "id": "width_logo_mobile",
+            "min": 50,
+            "max": 250,
+            "step": 5,
+            "unit": "px",
+            "label": "Width logo mobile", 
+            "default": 100
+        }, 
+        {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Menu"
+        } 
+    ],
+    "blocks": [
+        {
+            "type": "image",
+            "name": "Images",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "name_main_menu", 
+                    "label": "Name in main menu"
+                },
+                {
+                    "type": "header",
+                    "content": "Promo 1" 
+                },
+                {
+                    "type": "image_picker",
+                    "id": "block_image_1",
+                    "label": "Block image"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_new_1",
+                    "label": "Show new",
+                    "default": false
+                },
+                {
+                    "type": "text",
+                    "id": "block_title_1",
+                    "label": "Block title"
+                },
+                {
+                    "type": "text",
+                    "id": "block_subscribe_1",
+                    "label": "Block subscribe"
+                },
+                {
+                    "type": "url",
+                    "id": "block_url_1",
+                    "label": "Block url"
+                },
+                {
+                    "type": "header",
+                    "content": "Promo 2" 
+                },
+                {
+                    "type": "image_picker",
+                    "id": "block_image_2",
+                    "label": "Block image"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_new_2",
+                    "label": "Show new",
+                    "default": false
+                },
+                {
+                    "type": "text",
+                    "id": "block_title_2",
+                    "label": "Block title"
+                },
+                {
+                    "type": "text",
+                    "id": "block_subscribe_2",
+                    "label": "Block subscribe"
+                },
+                {
+                    "type": "url",
+                    "id": "block_url_2",
+                    "label": "Block url"
+                },
+                {
+                    "type": "header",
+                    "content": "Promo 3" 
+                },
+                {
+                    "type": "image_picker",
+                    "id": "block_image_3",
+                    "label": "Block image"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_new_3",
+                    "label": "Show new",
+                    "default": false
+                },
+                {
+                    "type": "text",
+                    "id": "block_title_3",
+                    "label": "Block title"
+                },
+                {
+                    "type": "text",
+                    "id": "block_subscribe_3",
+                    "label": "Block subscribe"
+                },
+                {
+                    "type": "url",
+                    "id": "block_url_3",
+                    "label": "Block url"
+                },
+                {
+                    "type": "header",
+                    "content": "Promo 4" 
+                },
+                {
+                    "type": "image_picker",
+                    "id": "block_image_4",
+                    "label": "Block image"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_new_4",
+                    "label": "Show new",
+                    "default": false
+                },
+                {
+                    "type": "text",
+                    "id": "block_title_4",
+                    "label": "Block title"
+                },
+                {
+                    "type": "text",
+                    "id": "block_subscribe_4",
+                    "label": "Block subscribe"
+                },
+                {
+                    "type": "url",
+                    "id": "block_url_4",
+                    "label": "Block url"
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "name": "Block list",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "name_main_menu", 
+                    "label": "Name in main menu"
+                },
+                {
+                    "type": "header",
+                    "content": "Block link list 1"
+                },
+                {
+                    "type": "link_list",
+                    "id": "link_list_1",
+                    "label": "Block heading"
+                },
+                {
+                    "type": "text",
+                    "id": "special_link_1",
+                    "label": "Speacial link"
+                },
+                {
+                    "type": "url",
+                    "id": "special_link_url_1",
+                    "label": "Speacial link url"
+                },
+                {
+                    "type": "text",
+                    "id": "button_link_1",
+                    "label": "Button link"
+                },
+                {
+                    "type": "url",
+                    "id": "button_link_url_1",
+                    "label": "Button link url"
+                },
+                {
+                    "type": "header",
+                    "content": "Block link list 2"
+                },
+                {
+                    "type": "link_list",
+                    "id": "link_list_2",
+                    "label": "Block heading"
+                },
+                {
+                    "type": "text",
+                    "id": "special_link_2",
+                    "label": "Speacial link"
+                },
+                {
+                    "type": "url",
+                    "id": "special_link_url_2",
+                    "label": "Speacial link url"
+                },
+                {
+                    "type": "text",
+                    "id": "button_link_2",
+                    "label": "Button link"
+                },
+                {
+                    "type": "url",
+                    "id": "button_link_url_2",
+                    "label": "Button link url"
+                },
+                {
+                    "type": "header",
+                    "content": "Block link list 3"
+                },
+                {
+                    "type": "link_list",
+                    "id": "link_list_3",
+                    "label": "Block heading"
+                },
+                {
+                    "type": "text",
+                    "id": "special_link_3",
+                    "label": "Speacial link"
+                },
+                {
+                    "type": "url",
+                    "id": "special_link_url_3",
+                    "label": "Speacial link url"
+                },
+                {
+                    "type": "text",
+                    "id": "button_link_3",
+                    "label": "Button link"
+                },
+                {
+                    "type": "url",
+                    "id": "button_link_url_3",
+                    "label": "Button link url"
+                },
+                {
+                    "type": "header",
+                    "content": "Block link list 4"
+                },
+                {
+                    "type": "link_list",
+                    "id": "link_list_4",
+                    "label": "Block heading"
+                },
+                {
+                    "type": "text",
+                    "id": "special_link_4",
+                    "label": "Speacial link"
+                },
+                {
+                    "type": "url",
+                    "id": "special_link_url_4",
+                    "label": "Speacial link url"
+                },
+                {
+                    "type": "text",
+                    "id": "button_link_4",
+                    "label": "Button link"
+                },
+                {
+                    "type": "url",
+                    "id": "button_link_url_4",
+                    "label": "Button link url"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Header_Anyday"
+        }
+    ] 
+}
+{% endschema %}

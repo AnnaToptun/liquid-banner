@@ -1,6 +1,7 @@
 development:
   password: shptka_0dbbc19c983d5d58b314ab5cfe30bec2
-  theme_id: 145013670180
+  theme_id: "145013670180"
   store: anna-toptun.myshopify.com
   ignore_files:
-    - config/settings_data.json
+  - config/settings_data.json 
+ 
