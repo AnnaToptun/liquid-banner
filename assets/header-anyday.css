@@ -137,7 +137,6 @@ li {
 
 .header__menu-title {   
     font-size: 18px;
-    
     letter-spacing: 0.56px;
     color: rgb(0, 0, 0);
 }
@@ -146,22 +145,30 @@ li {
     color: #e05647;
 }
 
-.header__menu li:last-child .header__menu-title {
+.header__menu-button {
+    margin: 20px 10%;
     padding: 3px 13px;
     border: 2px solid #e05647;
     background-color: #e05647;
+    border-radius: 10px;
+}
+
+.header__menu-button .header__menu-title {
     font-size: 22px;
     line-height: 22px;
-    border-radius: 10px;
     color: #fff;
     font-weight: 400;
     letter-spacing: .75px;
-    transition: .4s;
 }
-.header__menu li:last-child .header__menu-title:hover {
+
+.header__menu-button:hover {
     background-color: #fff;
-    color: #e05647
 }
+
+.header__menu-button:hover .header__menu-title{
+    color: #e05647;
+}
+
 
 .header__menu-dropdown {
     width: 100%;
@@ -213,6 +220,10 @@ li {
     cursor: unset;
 }
 
+.block__links {
+    display: flex;
+    justify-content: center;
+}
 .block__links-item {
     color: #000000;
     font-size: 18px;
@@ -291,12 +302,6 @@ li {
     z-index: 1; 
 }
 
-.menu__mobile-is-close {
-    left: 0;
-    position: absolute;
-    transform: translateX(-1200%);
-    transition: all 400ms cubic-bezier(0.29, 0.63, 0.44, 1);
-}
 
 .menu__mobile-is-open {
     top: 0;
@@ -308,12 +313,26 @@ li {
     background-color: #ffffff;
     transition: all 400ms cubic-bezier(0.29, 0.63, 0.44, 1);
     display: block;
-    overflow: hidden;
+    overflow-y: scroll;
     width: 100%;
     height: 100vh;
     z-index: 1;
     padding-bottom: 150px
 }
+
+.menu__mobile-is-close {
+    position: absolute;
+    transform: translateX(-1200%);
+    transition: all 400ms cubic-bezier(0.29, 0.63, 0.44, 1);
+}
+
+@media screen and (min-width: 1214px) {
+    .menu__mobile-is-open {
+        transform: translateX(-1200%);
+        transition: all 400ms cubic-bezier(0.29, 0.63, 0.44, 1);
+    }
+}
+
 .header-mobile {
     height: 80px;
     display: flex;
@@ -339,19 +358,23 @@ li {
 .header__menu-has-dropleft{
     padding: 20px 0;
 }
+.header__menu-has-dropleft:hover {
+    background-color: #4b0b0442;
+}
 
 .header__menu-mobile
 .header__icon-button {
     width: 100vw;
-    padding: 0 20px;
+    padding: 0 10%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff00;
     border: none;
     cursor: pointer;
-    
 }
+
+
+
 
 .header__menu-has-dropleft
 .header__menu-dropleft {
@@ -376,11 +399,27 @@ li {
 }
 
 .header__menu-dropleft-wrapper {
+    padding: 30px 10%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    row-gap: 40px;
+}
+
+.header__menu-dropleft-wrapper 
+.header__menu-dropleft-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: flex-start;
     gap: 20px 20px;
-    padding: 30px;
+}
+
+.header__menu-dropleft-wrapper 
+.header__menu-dropleft-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 20px;
 }
 
 .header__mobile--block-menu {

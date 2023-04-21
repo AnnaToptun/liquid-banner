@@ -5,13 +5,13 @@
 {% assign all_menu_links = section.settings.menu.links  %}
 {% assign logo_svg = section.settings.logo_svg %}
 {% assign logo_img = section.settings.logo_image %}
-
+{% assign menu_link_button = section.settings.menu_link_button %}
+{% assign menu_link_button_url = section.settings.menu_link_button_url %}
 {% assign image_classes = "header__logo-img" %}
 {% assign icon_classes = 'header__icon' %}           
 {% assign image_classes = 'header__menu-block-image-img' %}
 
 <script>
-
     const openBurger = () =>{
         const menu_mobile = document.getElementById("menu-mobile");
         menu_mobile.className = "menu__mobile-is-open";
@@ -33,17 +33,8 @@
     }
 </script>
 
-{%- liquid
-    assign posts_displayed = section.settings.blog.articles_count
-    if section.settings.posts_displayed <= section.settings.blog.articles_count
-      assign posts_exceed_limit = true
-      assign posts_displayed = section.settings.post_limit
-    endif
--%}
-
 <header class="header"> 
     <nav class="header__nav">
-        
         <div class="header_menu-icons-with-burger">
             <button class="header__icon-button" onclick="openBurger(event)">
                 {% render 'header-icons', title_icon: 'hamburger', class_name: icon_classes -%}
@@ -80,6 +71,11 @@
                         </div>
                     </li>  
                 {% endfor %}
+                {% if menu_link_button != blank and menu_link_button_url != blank %}
+                    <li class="header__menu-button">
+                        <a class="header__menu-title" href="{{menu_link_button_url}}"> {{menu_link_button}}</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
         <div class="header_menu-icons">
@@ -116,11 +112,13 @@
                 {% assign link_list_blocks = all_blocks | where: "type", "text"  %}                    
                 {% assign images_blocks = all_blocks | where: "type", "image"  %}
                 {% assign counter = 0 %}
+
                 <li  id="header-menu-dropleft" class="header__menu-has-dropleft ">
                     <button class="header__icon-button" onclick="openMenu(event)">
                         <a class="header__menu-title" href="{{link.url}}">{{link.title | escape }}</a>
                         {% render 'header-icons', title_icon: 'plus', class_name: icon_classes -%}
-                    </button>    
+                    </button>   
+                     
                     <div class="header__menu-dropleft">
                         <div class="header__mobile--block-menu">
                             <a class="header__mobile--block-title" href="{{link.url}}">{{link.title | escape }}</a>
@@ -129,14 +127,21 @@
                             </button>
                         </div>
                         <div class="header__menu-dropleft-wrapper">
-                          
-                            {% render 'header-anyday-blocks', type: 'link-list', array_blocks: link_list_blocks, link_title: link_title_handle, counter: counter%}
-                            {% render 'header-anyday-blocks', type: 'images', array_blocks: images_blocks, link_title: link_title_handle, counter: counter%}
-                            
+                            <div class="header__menu-dropleft-links">
+                                {% render 'header-anyday-blocks', type: 'link-list', array_blocks: link_list_blocks, link_title: link_title_handle, counter: counter%}
+                            </div>
+                            <div class="header__menu-dropleft-images">
+                                {% render 'header-anyday-blocks', type: 'images', array_blocks: images_blocks, link_title: link_title_handle, counter: counter%}
+                            </div>
                         </div>
                     </div>
                 </li>  
             {% endfor %}
+            {% if menu_link_button != blank and menu_link_button_url != blank %}
+                <li class="header__menu-button">
+                    <a class="header__menu-title" href="{{menu_link_button_url}}"> {{menu_link_button}}</a>
+                </li>
+            {% endif %}
         </ul>
     </nav> 
 </header>
@@ -181,7 +186,17 @@
             "type": "link_list",
             "id": "menu",
             "label": "Menu"
-        } 
+        },
+        {
+            "type": "text",
+            "id": "menu_link_button",
+            "label": "Menu button"
+        },
+        {
+            "type": "url",
+            "id": "menu_link_button_url",
+            "label": "Menu button url"
+        }  
     ],
     "blocks": [
         {
