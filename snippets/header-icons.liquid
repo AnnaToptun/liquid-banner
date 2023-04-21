@@ -23,26 +23,23 @@
         <svg class="{{class_name}}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <g id="Layer_3" data-name="Layer 3"><path d="M22,20.57l-6.14-6.14a7.65,7.65,0,0,0,1.61-4.7,7.73,7.73,0,1,0-7.72,7.72,7.65,7.65,0,0,0,4.7-1.61L20.57,22ZM9.73,15.45a5.73,5.73,0,1,1,5.72-5.72A5.73,5.73,0,0,1,9.73,15.45Z"></path> </g>
         </svg> 
+
     {% when 'close' %}
         <svg class="{{class_name}}" aria-hidden="true" focusable="false" width="25" height="25 viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.48627 9.32917L2.82849 3.67098" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M2.88539 9.38504L8.42932 3.61524" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
+
     {% when 'plus' %}
         <svg class="{{class_name}}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"  width="25px"  height="25px"  fill-rule="evenodd">
             <path fill-rule="evenodd" d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"/>
         </svg>
+
     {% when 'arrow' %}
-        <svg
-            viewBox="0 0 14 10"
-            fill="none"
-            aria-hidden="true"
-            focusable="false"
-            class="{{class_name}}"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg class="{{class_name}}" viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1a.5.5 0 010-1h10.793L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor">
         </svg>
+        
     {% else %}
         This is not a icon
 {% endcase %}
